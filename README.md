@@ -13,5 +13,7 @@
 
 ## Using the tool
 1. Checkout the git project and run the command:
+
    `python runTest.py --help`
+   
    ..to see the different options which could be used in the command line.
