@@ -10,3 +10,8 @@
    If you are using mAc and have installed Python3 using HomeBrew, then you may lack permissions to run the `pip` command. In such cases, use this commnd to install any pip package:
    
    `sudo -H \usr\local\bin\pip3 install svn`
+
+## Using the tool
+1. Checkout the git project and run the command:
+   `python runTest.py --help`
+   ..to see the different options which could be used in the command line.
