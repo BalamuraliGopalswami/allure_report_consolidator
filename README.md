@@ -20,4 +20,4 @@
 1. Use the `--list` option to list out the acceptance projects which you would want to select and run the tests for.
 1. An example of running the sss category for the apm and cwf projects would be:
 
-``python runTest.py --select apm-acceptance --select audit-advisor-acceptance --category AWSQASmokeTest
+`python runTest.py --select apm-acceptance --select audit-advisor-acceptance --category AWSQASmokeTest
