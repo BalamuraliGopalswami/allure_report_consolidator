@@ -3,7 +3,10 @@
 1. Install Git for windows along with Git Bash.
 1. Install SVN client with Command Line Tools
    This can be done by selecting the "command line tools" install options while installing the TortoiseSVN client as shown below
-   <img>
+   
+   
+   ![alt text](https://github.com/sridharaiyer/allure_report_consolidator/images/svn/command_line_tool.png "command_line_tool")
+
    Once installed, open your Git Bash prompt or DOS Command Line prompt and type `svn --version`
    You should see a message similar to this on Windows:
    <b>
