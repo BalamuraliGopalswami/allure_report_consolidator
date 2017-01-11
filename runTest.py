@@ -1,62 +1,85 @@
+#!/usr/local/bin/python3.6
 import svn.remote
+import svn.local
 import argparse
+import sys
+import os
+import subprocess
+import pprint
 
 
-# r = svn.remote.RemoteClient(
-#     'http://svn.proddev.cccis.com:8090/svn/QA/trunk/acceptance-projects/')
-# for dir in r.list():
-#     print(dir)
-test_category_options = ['AWSQASmokeTest', 'AWSRegression', 'QASmokeTest', 'QARegression', 'CTSmoke', 'ProdSmoke' ]
+TEST_CATEGORY_OPTIONS = ['AWSQASmokeTest', 'AWSRegression', 'QASmokeTest', 'QARegression', 'CTSmoke', 'ProdSmoke']
+SVN_BASE_LOCATION = 'http://svn.proddev.cccis.com:8090/svn/QA/trunk/acceptance-projects/'
+DEFAULT_WORKSPACE = ''
 
-parser = argparse.ArgumentParser()
+if sys.platform.startswith('win32'):
+    print("Windows")
+    DEFAULT_WORKSPACE = 'C:\Workspace'
+elif sys.platform.startswith('linux2'):
+    print("Linux")
+elif sys.platform.startswith('cygwin'):
+    print("Windows/Cygwin")
+elif sys.platform.startswith('darwin'):
+    print("Mac OS X")
+    DEFAULT_WORKSPACE = '/Users/sridhariyer//workspace'
+elif sys.platform.startswith('os2'):
+    print("OS/2")
+elif sys.platform.startswith('os2emx'):
+    print("OS/2 EMX")
+elif sys.platform.startswith('riscos'):
+    print("RiscOS")
+elif sys.platform.startswith('atheos'):
+    print("AtheOS")
+
+print('Does dir {} exists? {}'.format(DEFAULT_WORKSPACE, os.path.isdir(DEFAULT_WORKSPACE)))
+
+parser = argparse.ArgumentParser(add_help=True,)
 
 parser.add_argument('--select', action='append', dest='acceptance_modules_collection',
                     default=[],
-                    help='Select the acceptance test module(s)',
-                    required=True
+                    help='Select the acceptance test module(s). Example python runtest.py --select apm-acceptance --select cwf-accptance',
                     )
-
+parser.add_argument('--list', '-l',
+                    help='List the acceptance modules from the SVN location: http://svn.proddev.cccis.com:8090/svn/QA/trunk/acceptance-projects/',
+                    required=False,
+                    action='store_true'
+                    )
 parser.add_argument('--category', action='store',
-                    dest='test_category',
-                    help='Specify the test category. Available options: {}'.format(test_category_options),
-                    required=True)
-
-parser.add_argument('-c', action='store_const',
-                    dest='constant_value',
-                    const='value-to-store',
-                    help='Store a constant value')
-
-parser.add_argument('-t', action='store_true',
-                    default=False,
-                    dest='boolean_t',
-                    help='Set a switch to true')
-parser.add_argument('-f', action='store_false',
-                    default=True,
-                    dest='boolean_f',
-                    help='Set a switch to false')
-
-parser.add_argument('-A', action='append_const',
-                    dest='const_collection',
-                    const='value-1-to-append',
-                    default=[],
-                    help='Add different values to list')
-parser.add_argument('-B', action='append_const',
-                    dest='const_collection',
-                    const='value-2-to-append',
-                    help='Add different values to list')
-
+                    help='Specify the test category. Available options: {}'.format(TEST_CATEGORY_OPTIONS),
+                    )
 parser.add_argument('--version', action='version',
                     version='%(prog)s 1.0')
 
 
-results = parser.parse_args()
-print('test_category     = {!r}'.format(results.test_category))
-print('constant_value   = {!r}'.format(results.constant_value))
-print('boolean_t        = {!r}'.format(results.boolean_t))
-print('boolean_f        = {!r}'.format(results.boolean_f))
-print('acceptance_modules_collection       = {!r}'.format(results.acceptance_modules_collection))
-print('const_collection = {!r}'.format(results.const_collection))
+args = parser.parse_args()
 
-if not vars(results):
+if len(sys.argv) == 1:
     parser.print_help()
-    parser.exit(1)
+    sys.exit(0)
+
+if args.list:
+    for project_module in svn.remote.RemoteClient(SVN_BASE_LOCATION).list():
+        print(project_module)
+
+print('Running the category {} in the projects {}'.format(args.category, args.acceptance_modules_collection))
+
+origWD = os.getcwd()
+print('The current working dir is: {}'.format(origWD))
+
+
+for project in args.acceptance_modules_collection:
+    project_local_path = os.path.join(DEFAULT_WORKSPACE, project)
+    if not os.path.isdir(project_local_path):
+        print('Checking out the project - {}'. format(project))
+        svn.remote.RemoteClient(os.path.join(SVN_BASE_LOCATION, project)).checkout(project_local_path)
+    else:
+        print('Project - {}, already exists in workspace. Updating it'.format(project))
+        os.chdir(project_local_path)
+        proc = subprocess.Popen('svn up', stdout=subprocess.PIPE, shell=True)
+        (output, err) = proc.communicate()
+        print('{}'.format(output.decode('utf-8')))
+        local_repo = svn.local.LocalClient(project_local_path)
+        pprint.pprint(local_repo.info())
+    print('Running the maven command: mvn clean -Dmaven.clean.failOnError=false -P{} test allure:report'.format(args.category))
+
+os.chdir(origWD)
