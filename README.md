@@ -5,7 +5,7 @@
    This can be done by selecting the "command line tools" install options while installing the TortoiseSVN client as shown below
    
    
-   ![alt text](https://github.com/sridharaiyer/allure_report_consolidator/images/svn/command_line_tool.png "command_line_tool")
+   ![alt text](https://github.com/sridharaiyer/allure_report_consolidator/blob/master/images/svn/command_line_tool.png "command_line_tool")
 
    Once installed, open your Git Bash prompt or DOS Command Line prompt and type `svn --version`
    You should see a message similar to this on Windows:
