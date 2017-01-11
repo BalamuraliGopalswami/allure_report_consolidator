@@ -7,7 +7,9 @@
    Once installed, open your Git Bash prompt or DOS Command Line prompt and type `svn --version`
    You should see a message similar to this on Windows:
    <b>
-   $ svn --version
+   
+   
+   svn --version
    svn, version 1.9.5 (r1770682)
    compiled Nov 26 2016, 14:22:31 on x86-microsoft-windows
 
@@ -31,7 +33,7 @@
    The following authentication credential caches are available:
 
    * Wincrypt cache in C:\Users\pceqa\AppData\Roaming\Subversion
-   <b>
+   </b>
    
 1. Install the latest version of Python
 1. Install the latest version of `pip`
