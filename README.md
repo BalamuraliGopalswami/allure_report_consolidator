@@ -47,6 +47,10 @@
    If you are using mAc and have installed Python3 using HomeBrew, then you may lack permissions to run the `pip` command. In such cases, use this commnd to install any pip package:
    
    `sudo -H \usr\local\bin\pip3 install svn`
+   
+   If you had used Homebrew to install software in Mac, then you can use this command to grant you access to all the packagaes installed by Homerew:
+   
+   `sudo chown $(whoami):admin /usr/local && sudo chown -R $(whoami):admin /usr/local`
 
 ## Using the tool
 1. Checkout the git project and run the command:
@@ -55,6 +59,6 @@
    
    ..to see the different options which could be used in the command line.
 1. Use the `--list` option to list out the acceptance projects which you would want to select and run the tests for.
-1. An example of running the AWSQASmokeTest category for the apm and cwf projects would be:
+1. An example of running the POCSmokeTest category for the base-project and sample-project acceptance projects would be:
 
-`python runTest.py --select apm-acceptance --select audit-advisor-acceptance --category AWSQASmokeTest`
+`python runTest.py --select base-project-acceptance/ --select sample-project-acceptance/ --category POCSmokeTest`
