@@ -1,5 +1,5 @@
 # Allure Report Consolidator - Requirements
-## Problem statement - Checkout acceptance projects locally from SVN, run tests in different categories and send the consolidated results from the modules to 1 central VM and run the stand-alone Allure report generator on that central VM and host the consolidated results.
+## Problem statement - Checkout acceptance projects locally from SVN, run tests in different categories and send the consolidated results from the modules to a central VM and run the stand-alone Allure report generator on that central VM and host the consolidated results.
 ### SVN
 1. Should be able to connect to the SVN repo - http://svn.proddev.cccis.com:8090/svn/QA/trunk/acceptance-projects/
 1. The user should be able to list the acceptance modules from the repository to choose from and run.
@@ -12,7 +12,7 @@
 1. The tool should generate the allure-results by supplying the allure maven goal by default.
 1. All the projects should have the maven copy resources plug-in in them and configured to copy the allure results to the user.home/allure-results/release directory, where the `release` argument value is provided by the user to the tool, which in turn provides this to the maven goal.
 
-... The maven copy resources plug-in have been incorporated in the base and sample-project acceptance projects. Here's how they look
+...The maven copy resources plug-in have been incorporated in the base and sample-project acceptance projects. Here's how they look
 
 ```
 
