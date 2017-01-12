@@ -12,6 +12,37 @@
 1. The tool should generate the allure-results by supplying the allure maven goal by default.
 1. All the projects should have the maven copy resources plug-in in them and configured to copy the allure results to the user.home/allure-results/release directory, where the `release` argument value is provided by the user to the tool, which in turn provides this to the maven goal.
 
+... The maven copy resources plug-in have been incorporated in the base and sample-project acceptance projects. Here's how they look
+
+```
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>test</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${user.home}/allure-results</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/target/allure-results</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+```
+
 ### Allure Results
 1. The tool should copy the allure results created in the user.home/allure-results/release directory to the central VM user.home/allure-results/release directory, at the end of each test.
 
